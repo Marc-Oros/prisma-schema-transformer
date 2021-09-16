@@ -198,7 +198,7 @@ function deserializeEnum({name, values, dbName}: DMMF.DatamodelEnum) {
 	const outputValues = values.map(({ name, dbName }) => {
 		let result = name
 		if (name !== dbName && dbName)
-			result += `@map("${dbName}")`
+			result += ` @map("${dbName}")`
 		return result
 	})
 	return `

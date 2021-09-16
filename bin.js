@@ -12,6 +12,7 @@ const args = arg({
 	'--help': Boolean,
 	'--version': Boolean,
 	'--print': Boolean,
+	'--ignore-enum-values': String,
 	'--deny': [String],
 	// Aliases
 	'-v': '--version'
@@ -36,9 +37,10 @@ Exclude some models from the output
   $ prisma-schema-transformer ./schema.prisma --deny knex_migrations --deny knex_migration_lock
 
 Options:
-  --print   Do not save
-  --deny    Exlucde model from output
-  --help    Help
+  --print   			Do not save
+  --deny    			Exclude model from output
+  --help    			Help
+  --ignore-enum-values 	Do not convert enum values to camel case
   --version Version info`);
 	process.exit(0);
 }
@@ -51,9 +53,10 @@ if (args._.length !== 1) {
 const schemaPath = args._[0];
 const isPrint = args['--print'] || false;
 const denyList = args['--deny'] || [];
+const ignoreEnumValues = args['--ignore-enum-values'] !== "false";
 
 (async function () {
-	const output = await fixPrismaFile(schemaPath, denyList);
+	const output = await fixPrismaFile(schemaPath, denyList, ignoreEnumValues);
 	if (isPrint) {
 		console.log(output);
 	} else {

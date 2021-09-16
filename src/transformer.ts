@@ -71,7 +71,7 @@ function transformModel(model: Model) {
 	return fixIdFieldsName;
 }
 
-function transformEnum(enumm: DMMF.DatamodelEnum) {
+function transformEnum(enumm: DMMF.DatamodelEnum, ignoreEnumValues: Boolean) {
 	const { name } = enumm;
 
 	const fixModelName = produce(enumm, draftModel => {
@@ -86,11 +86,13 @@ function transformEnum(enumm: DMMF.DatamodelEnum) {
 		draftModel.values = draftModel.values.map(field => produce(field, draftField => {
 			const {name, dbName} = draftField;
 
-			// Transform field name
-			draftField.name = camelcase(pluralize.singular(name));
+			if (!ignoreEnumValues) {
+				// Transform field name
+				draftField.name = camelcase(pluralize.singular(name));
 
-			if (draftField.name !== name) {
-				draftField.dbName = dbName || name;
+				if (draftField.name !== name) {
+					draftField.dbName = dbName || name;
+				}
 			}
 		}));
 	});
@@ -102,6 +104,6 @@ export function dmmfModelTransformer(models: Model[]): Model[] {
 	return models.map(model => transformModel(model));
 }
 
-export function dmmfEnumTransformer(enums: DMMF.DatamodelEnum[]): DMMF.DatamodelEnum[] {
-	return enums.map(each => transformEnum(each));
+export function dmmfEnumTransformer(enums: DMMF.DatamodelEnum[], ignoreEnumValues: Boolean): DMMF.DatamodelEnum[] {
+	return enums.map(each => transformEnum(each, ignoreEnumValues));
 }
