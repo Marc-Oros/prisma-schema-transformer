@@ -18,7 +18,7 @@ export async function fixPrismaFile(schemaPath: string, denyList: readonly strin
 
 	const filteredModels = models.filter(each => !denyList.includes(each.name));
 	const filteredEnums = dmmf.datamodel.enums.filter(each => !denyList.includes(each.name));
-	const transformedModels = dmmfModelTransformer(filteredModels);
+	const transformedModels = dmmfModelTransformer(filteredModels, ignoreEnumValues);
 	const transformedEnums = dmmfEnumTransformer(filteredEnums, ignoreEnumValues);
 
 	let outputSchema = [

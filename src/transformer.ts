@@ -9,7 +9,7 @@ function singularizeModelName(modelName: string) {
 	return camelcase(pluralize(modelName, 1), {pascalCase: true});
 }
 
-function transformModel(model: Model) {
+function transformModel(model: Model, ignoreEnumValues: Boolean) {
 	const {name, uniqueFields, idFields} = model;
 
 	const fixModelName = produce(model, draftModel => {
@@ -40,7 +40,7 @@ function transformModel(model: Model) {
 			// Enum
 			if (kind === 'enum' && type !== singularizeModelName(type)) {
 				draftField.type = singularizeModelName(type);
-				if (draftField.default)
+				if (!ignoreEnumValues && draftField.default)
 					draftField.default = camelcase(draftField.default)
 			}
 
@@ -100,8 +100,8 @@ function transformEnum(enumm: DMMF.DatamodelEnum, ignoreEnumValues: Boolean) {
 	return fixFieldsName;
 }
 
-export function dmmfModelTransformer(models: Model[]): Model[] {
-	return models.map(model => transformModel(model));
+export function dmmfModelTransformer(models: Model[], ignoreEnumValues: Boolean): Model[] {
+	return models.map(model => transformModel(model, ignoreEnumValues));
 }
 
 export function dmmfEnumTransformer(enums: DMMF.DatamodelEnum[], ignoreEnumValues: Boolean): DMMF.DatamodelEnum[] {
