@@ -7,7 +7,7 @@ import {datasourcesDeserializer, dmmfModelsdeserializer, dmmfEnumsDeserializer, 
  * @param schemaPath Path to the Prisma schema file
  * @param deny A comma seperated
  */
-export async function fixPrismaFile(schemaPath: string, denyList: readonly string[] = []) {
+export async function fixPrismaFile(schemaPath: string, denyList: readonly string[] = [], ignoreEnumValues: Boolean) {
 	const schema = fs.readFileSync(schemaPath, 'utf-8');
 	const dmmf = await getDMMF({datamodel: schema});
 	const config = await getConfig({datamodel: schema});
@@ -19,7 +19,7 @@ export async function fixPrismaFile(schemaPath: string, denyList: readonly strin
 	const filteredModels = models.filter(each => !denyList.includes(each.name));
 	const filteredEnums = dmmf.datamodel.enums.filter(each => !denyList.includes(each.name));
 	const transformedModels = dmmfModelTransformer(filteredModels);
-	const transformedEnums = dmmfEnumTransformer(filteredEnums);
+	const transformedEnums = dmmfEnumTransformer(filteredEnums, ignoreEnumValues);
 
 	let outputSchema = [
 		await datasourcesDeserializer(datasources),
