@@ -125,7 +125,7 @@ function handleFields(fields: Field[]) {
 }
 
 function handleIdFields(idFields: string[]) {
-	return idFields.length > 0 ? `@@id([${idFields.join(', ')}])` : '';
+	return idFields && idFields.length > 0 ? `@@id([${idFields.join(', ')}])` : '';
 }
 
 function handleUniqueFieds(uniqueFields: string[][]) {
@@ -189,7 +189,7 @@ function deserializeGenerator(generator: GeneratorConfig) {
 generator ${name} {
 	${handleProvider(provider.value)}
 	${handleOutput(output?.value || null)}
-	${handleBinaryTargets(binaryTargets)}
+	${handleBinaryTargets(binaryTargets.map(item => item.value))}
 	${handlePreviewFeatures(previewFeatures)}
 }`;
 }
