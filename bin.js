@@ -37,10 +37,10 @@ Exclude some models from the output
   $ prisma-schema-transformer ./schema.prisma --deny knex_migrations --deny knex_migration_lock
 
 Options:
-  --print   			Do not save
-  --deny    			Exclude model from output
-  --help    			Help
-  --ignore-enum-values 	Do not convert enum values to camel case
+  --print               Do not save
+  --deny                Exclude model from output
+  --help                Help
+  --ignore-enum-values  Do not convert enum values to camel case
   --version Version info`);
 	process.exit(0);
 }
