@@ -56,6 +56,9 @@ const handlers = (type, kind) => {
 			}
 
 			if (typeof (value) === 'object') {
+				if (value.name === 'dbgenerated') {
+					return `@default(${value.name}("${value.args}"))`;
+				}
 				return `@default(${value.name}(${value.args}))`;
 			}
 
